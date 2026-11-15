@@ -27,7 +27,6 @@ targets:
       - path: src
         excludes:
           - PhysicsEngine
-      - path: Assets
     dependencies:
       - target: physics
     settings:
