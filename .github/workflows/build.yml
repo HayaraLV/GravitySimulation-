@@ -16,6 +16,10 @@ jobs:
     name: Build unsigned IPA
     runs-on: macos-15
 
+    defaults:
+      run:
+        working-directory: Gravity
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,6 +31,12 @@ jobs:
 
       - name: Install XcodeGen
         run: brew install xcodegen
+
+      - name: Check project configuration
+        run: |
+          pwd
+          ls -la
+          test -f project.yml
 
       - name: Generate Xcode project
         run: xcodegen generate
@@ -54,20 +64,14 @@ jobs:
       - name: Package unsigned IPA
         run: |
           mkdir -p Payload
-
-          cp -R \
-            build/Build/Products/Release-iphoneos/Gravity.app \
-            Payload/
-
-          ditto -c -k --sequesterRsrc --keepParent \
-            Payload Gravity-unsigned.ipa
-
+          cp -R build/Build/Products/Release-iphoneos/Gravity.app Payload/
+          ditto -c -k --sequesterRsrc --keepParent Payload Gravity-unsigned.ipa
           unzip -t Gravity-unsigned.ipa
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: Gravity-unsigned-IPA
-          path: Gravity-unsigned.ipa
+          path: Gravity/Gravity-unsigned.ipa
           if-no-files-found: error
           retention-days: 14
