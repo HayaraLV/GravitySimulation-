@@ -1,0 +1,43 @@
+
+name: Gravity
+
+options:
+  bundleIdPrefix: com.hayara
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+targets:
+  physics:
+    type: framework
+    platform: iOS
+    sources:
+      - path: src/PhysicsEngine
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.hayara.gravity.physics
+        GENERATE_INFOPLIST_FILE: YES
+        SKIP_INSTALL: YES
+        DEFINES_MODULE: YES
+
+  Gravity:
+    type: application
+    platform: iOS
+    sources:
+      - path: src
+        excludes:
+          - PhysicsEngine
+      - path: Assets
+    dependencies:
+      - target: physics
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.hayara.gravity
+        PRODUCT_NAME: Gravity
+        INFOPLIST_KEY_CFBundleDisplayName: Gravity
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1,2"
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGNING_ALLOWED: NO
